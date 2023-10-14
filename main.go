@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
 	"smart_confluence_search/confluence"
 	"smart_confluence_search/constant"
 	"smart_confluence_search/lib"
@@ -45,8 +46,7 @@ func Handler(event Search) (SearchResultList, error) {
 	}
 
 	fmt.Println("start to get label page")
-	// labelPageID := os.Getenv("LABEL_PAGE_ID")
-	labelPageID := "3257762034"
+	labelPageID := os.Getenv("LABEL_PAGE_ID")
 	labels := confluence.GetPageContentByID(labelPageID)
 
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(labels.Body.View.Value))
@@ -71,8 +71,7 @@ func Handler(event Search) (SearchResultList, error) {
 	fmt.Println("start to search page by label")
 	pages := confluence.SearchPageByLabel(searchList[0])
 
-	// confluenceEndpoint := os.Getenv("CONFLUENCE_ENDPOINT")
-	confluenceEndpoint := "https://kkvideo.atlassian.net/"
+	confluenceEndpoint := os.Getenv("CONFLUENCE_ENDPOINT")
 
 	if len(pages) == 0 {
 		fmt.Println("No page found")

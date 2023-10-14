@@ -2,10 +2,11 @@ package lib
 
 import (
 	"fmt"
+	"os"
 )
 
-var SlackWebhook = ""
-var SlackChannel = "#slack_web_hook_test"
+var SlackWebhook = os.Getenv("SLACK_WEBHOOK")
+var SlackChannel = os.Getenv("SLACK_CHANNEL")
 
 func HandleErr(err error) {
 	if err != nil {

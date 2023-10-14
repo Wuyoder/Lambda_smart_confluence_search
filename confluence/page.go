@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"smart_confluence_search/constant"
 	"smart_confluence_search/lib"
 
@@ -13,8 +14,7 @@ import (
 )
 
 func GetPageContentByID(pageID string) PageContent {
-	// confluenceEndpoint := os.Getenv("CONFLUENCE_ENDPOINT")
-	confluenceEndpoint := "https://kkvideo.atlassian.net/"
+	confluenceEndpoint := os.Getenv("CONFLUENCE_ENDPOINT")
 	url := confluenceEndpoint + fmt.Sprintf(constant.GetPageContenAPI, pageID) + "?body-format=view"
 
 	req := getClient(url, "GET", nil)
@@ -33,8 +33,7 @@ func GetPageContentByID(pageID string) PageContent {
 }
 
 func UpdateTagsToPage(pageID string, tagsString string) *http.Response {
-	// confluenceEndpoint := os.Getenv("CONFLUENCE_ENDPOINT")
-	confluenceEndpoint := "https://kkvideo.atlassian.net/"
+	confluenceEndpoint := os.Getenv("CONFLUENCE_ENDPOINT")
 	url := confluenceEndpoint + fmt.Sprintf(constant.PostPageLabelAPI, pageID)
 
 	input := Label{
@@ -81,10 +80,8 @@ func SearchPageByLabel(labels string) []Result {
 }
 
 func getClient(url string, method string, body io.Reader) *http.Request {
-	// username := os.Getenv("CONFLUENCE_USERNAME")
-	// password := os.Getenv("CONFLUENCE_PASSWORD")
-	username := ""
-	password := ""
+	username := os.Getenv("CONFLUENCE_USERNAME")
+	password := os.Getenv("CONFLUENCE_PASSWORD")
 
 	req, _ := http.NewRequest(method, url, body)
 	req.Header.Set("Content-Type", "application/json")
@@ -100,8 +97,7 @@ func genURL(labels []string) string {
 	searchLabels := strings.Join(labelLimit, "%2C")
 	cql := "label%20in%28" + searchLabels[:len(searchLabels)-3] + "%29"
 
-	// confluenceEndpoint := os.Getenv("CONFLUENCE_ENDPOINT")
-	confluenceEndpoint := "https://kkvideo.atlassian.net/"
+	confluenceEndpoint := os.Getenv("CONFLUENCE_ENDPOINT")
 	url := confluenceEndpoint + constant.ConfluenceSearchAPI
 	url += "space=" + constant.SpaceID
 	url += "&limit=" + constant.ConfluenceSearchLimit
